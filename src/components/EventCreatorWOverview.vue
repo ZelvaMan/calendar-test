@@ -30,7 +30,7 @@
     <div class="overview-container">
       <div class="name-container input">Overview</div>
 
-      <div v-for="n in parseInt(daysOfWeek, 10)" :key="n" :ref="n" class="input">a</div>
+      <div v-for="n in parseInt(daysOfWeek, 10)" :key="n" :ref="n" class="input">LineContainer</div>
       <div class="input total-hours"></div>
       <div class="input total-hours"></div>
     </div>
