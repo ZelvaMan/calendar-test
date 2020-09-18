@@ -138,10 +138,13 @@ export default {
     //methof fot hangeling onchange events
     onChangeHandler(target) {
       console.log("Change trigered s:" + target.innerText);
+      //delete gray background if there isnt x
       if (target.innerText == "") {
         target.classList.remove("x");
         return;
       }
+      //if input is x, it adds gray background
+
       if (target.innerText.toLowerCase() == "x") {
         if (!target.classList.contains("x")) target.classList.add("x");
         console.log("return");
@@ -193,7 +196,10 @@ export default {
     createEvent(string, id) {
       var date = moment(this.weekDateStart, "YYYY/MM/DD").add(id - 1, "d");
       //add date to disabled dates
-
+      if (string == " " || string == "") {
+        //if string is empty
+        result = null;
+      }
       var c = string.charAt(0);
       var possision = this.resourceInfo.possision;
       if (!(c >= "0" && c <= "9")) {
@@ -206,7 +212,11 @@ export default {
       var times = this.parseTimes(string);
       var result = null;
       //if times are valid
-      if (!(times.start > times.end)) {
+      if (
+        !(times.start > times.end) &&
+        !times.start == null &&
+        !times.end == null
+      ) {
         //create event object
         var eventObject = {
           start: date.format("YYYY/MM/DD") + " " + times.start,
@@ -219,10 +229,7 @@ export default {
       } else {
         result = null;
       }
-      if (string == " " || string == "") {
-        //if string is empty
-        result = null;
-      }
+
       return result;
     },
     //return object wih two moment time start and end
@@ -242,6 +249,7 @@ export default {
       } else {
         result.end = moment(splitted[1], "HH:mm").format("HH:mm");
       }
+      if (result.start == "" || result.end == "") return null;
       return result;
     },
     //* enter and space press handler will add new line to code
@@ -401,6 +409,7 @@ export default {
 .event-creator-line-container {
   display: table-row; /* or inline-flex */
   width: auto;
+  background: White;
 }
 .input-container {
   display: table-cell;

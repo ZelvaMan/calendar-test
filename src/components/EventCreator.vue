@@ -301,6 +301,6 @@ export default {
 }
 .select {
   padding: 1px;
-  width: 30%;
+  display: table-cell;
 }
 </style>  

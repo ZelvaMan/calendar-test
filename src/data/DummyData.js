@@ -15,7 +15,7 @@ export const dummyResourceInfoForEventCreator = [{
   },
   {
 
-    color: "GOLD",
+    color: "orange",
     name: "Lukas",
     id: "D",
     possision: "FOH"
@@ -144,43 +144,43 @@ export const dummyEventsForEventCreator = [
   {
     start: "	2020/08/10 14:00 ",
     end: "cl",
-    color: "GOLD",
+    color: "orange",
     resource: "D",
     possision: "FOH"
   }, {
     start: "	2020/08/11 15:00 ",
     end: "cl",
-    color: "GOLD",
+    color: "orange",
     resource: "D",
     possision: "FOH"
   }, {
     start: "	2020/08/12 10:00 ",
     end: "cl",
-    color: "GOLD",
+    color: "orange",
     resource: "D",
     possision: "FOH"
   }, {
     start: "	2020/08/13 14:00 ",
     end: "20:00",
-    color: "GOLD",
+    color: "orange",
     resource: "D",
     possision: "FOH"
   }, {
     start: "	2020/08/14 14:00 ",
     end: "cl",
-    color: "GOLD",
+    color: "orange",
     resource: "D",
     possision: "FOH"
   }, {
     start: "	2020/08/15 14:00 ",
     end: "cl",
-    color: "GOLD",
+    color: "orange",
     resource: "D",
     possision: "FOH"
   }, {
     start: "	2020/08/16 14:00 ",
     end: "cl",
-    color: "GOLD",
+    color: "orange",
     resource: "D",
     possision: "FOH"
   },
@@ -286,43 +286,43 @@ export const dummyEventsForEventCreator = [
   {
     start: "    2020/08/17 14:00 ",
     end: "cl",
-    color: "GOLD",
+    color: "orange",
     resource: "D",
     possision: "FOH"
   }, {
     start: "    2020/08/18 15:00 ",
     end: "cl",
-    color: "GOLD",
+    color: "orange",
     resource: "D",
     possision: "FOH"
   }, {
     start: "    2020/08/19 17:00 ",
     end: "cl",
-    color: "GOLD",
+    color: "orange",
     resource: "D",
     possision: "FOH"
   }, {
     start: "    2020/08/20 14:00 ",
     end: "20:00",
-    color: "GOLD",
+    color: "orange",
     resource: "D",
     possision: "FOH"
   }, {
     start: "    2020/08/21 14:00 ",
     end: "cl",
-    color: "GOLD",
+    color: "orange",
     resource: "D",
     possision: "FOH"
   }, {
     start: "    2020/08/22 14:00 ",
     end: "cl",
-    color: "GOLD",
+    color: "orange",
     resource: "D",
     possision: "FOH"
   }, {
     start: "    2020/08/23 14:00 ",
     end: "cl",
-    color: "GOLD",
+    color: "orange",
     resource: "D",
     possision: "FOH"
   }
