@@ -249,7 +249,7 @@ export default {
       } else {
         result.end = moment(splitted[1], "HH:mm").format("HH:mm");
       }
-      if (result.start == "" || result.end == "") return null;
+      if (!result.start.isValid || !result.end.isValid) return null;
       return result;
     },
     //* enter and space press handler will add new line to code
