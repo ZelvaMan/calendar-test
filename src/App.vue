@@ -1,70 +1,14 @@
 <template>
   <app-container :is-loading="false " top-nav-color="success" no-bars>
     <template #top-nav>
-      <top-nav-link :to="{name: 'route1'}">route1</top-nav-link>
-      <top-nav-link :to="{name: 'route2'}">route2</top-nav-link>
-      <top-nav-link :to="{name: 'route3'}">route3</top-nav-link>
-      <top-nav-link :to="{name: 'route4'}">route4</top-nav-link>
+      <button v-on:click="setPage('f')" class="btn-transparent">Double component</button>
+      <button v-on:click="setPage('s')" class="btn-transparent">Single Component</button>
     </template>
     <template #side-nav>
       <demo-sidenav />
     </template>
-    <Page>
-      <div class="header">
-        <h1>WeekOverview</h1>
-
-        <div class="buttons">
-          <lteButton
-            class="btn-wspace"
-            :is-primary="true"
-            v-on:click.native="removeWeek()"
-          >previous week</lteButton>
-          <lteButton class="btn-wspace" :is-primary="true" v-on:click.native="addWeek()">next week</lteButton>
-        </div>
-      </div>
-
-      <div class="flex-container">
-        <WeekOverview
-          :startTime="startTime"
-          :endTime="endTime"
-          :events="events"
-          :startDate="date"
-          :possisions="getPossisions"
-          daysOfWeek="7"
-        />
-
-        <div class="right-container">
-          <EventCreator
-            daysOfWeek="7"
-            v-on:input="addEvent"
-            :startTime="startTime"
-            :endTime="endTime"
-            :events="events"
-            :resourceInfos="EventCreatorData.resourceInfo"
-            :startDate="date"
-          ></EventCreator>
-          <div class="info" title="info">
-            <card class="collumns">
-              <p>
-                Barvy jmen
-                odpovidaji
-                barvam car
-              </p>
-              <div style="margin-left: 20px">
-                <h3>zkratky</h3>
-                <p>
-                  f == FOH
-                  <br />u == Uklid
-                  <br />b == BOH
-                  <br />cl == zaviracka
-                  <br />
-                </p>
-              </div>
-            </card>
-          </div>
-        </div>
-      </div>
-    </Page>
+    <first-page v-if="page =='f'"></first-page>
+    <second-page v-if="page =='s'"></second-page>
   </app-container>
 </template>
  
@@ -72,6 +16,9 @@
 
 
 <script>
+//!PAGES
+import FirstPage from "./pages/FirstPage";
+import SecondPage from "./pages/SecondPage";
 // main.js
 import Vue from "vue";
 import VueAdminLte from "@keenmate/vue-adminlte";
@@ -81,9 +28,6 @@ import "@keenmate/vue-adminlte/src/vue-adminlte-setup";
 
 import moment from "moment";
 import Multiselect from "vue-multiselect";
-
-import WeekOverview from "./components/WeekOverview.vue";
-import EventCreator from "./components/EventCreator";
 // register globally
 
 //Vue.use(VueRouter);
@@ -96,51 +40,16 @@ import {
 } from "./data/DummyData.js";
 export default {
   name: "App",
-  components: { WeekOverview, EventCreator },
+  components: { FirstPage, SecondPage },
   data() {
     return {
-      EventCreatorData: {
-        events: dummyEventsForEventCreator,
-        resourceInfo: dummyResourceInfoForEventCreator,
-      },
-      eventCreatorEvents: [],
-      dummyEventsBool: true,
-      possisions: possisionList,
-      events: [],
-      startTime: "8:00",
-      endTime: "22:00",
-      date: "2020/08/10",
+      page: "f",
     };
   },
   methods: {
-    addEvent(events) {
-      console.log(events);
-      this.events = events;
+    setPage(page) {
+      this.page = page;
     },
-    removeWeek() {
-      this.date = moment(this.date, "YYYY/MM/DD")
-        .add(-7, "d")
-        .format("YYYY/MM/DD");
-    },
-    addWeek() {
-      this.date = moment(this.date, "YYYY/MM/DD")
-        .add(7, "d")
-        .format("YYYY/MM/DD");
-    },
-  },
-  computed: {
-    getPossisions() {
-      var p = this.possisions;
-
-      console.log(" get possisions:");
-      console.log(p);
-      return p;
-    },
-  },
-  mounted() {
-    console.log(this.data);
-    moment.locale("cs");
-    this.events = this.EventCreatorData.events;
   },
 };
 </script>
@@ -193,6 +102,14 @@ export default {
 }
 .btn-wspace {
   margin-left: 10px;
+}
+.btn-transparent {
+  background-color: Transparent;
+  background-repeat: no-repeat;
+  border: none;
+  cursor: pointer;
+  overflow: hidden;
+  outline: none;
 }
 </style>
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>

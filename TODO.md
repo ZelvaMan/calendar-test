@@ -1,0 +1,1 @@
+- fix NaN issue with total hours in month

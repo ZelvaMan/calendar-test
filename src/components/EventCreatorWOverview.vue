@@ -27,6 +27,13 @@
         </b>
       </div>
     </div>
+    <div class="overview-container">
+      <div class="name-container input">Overview</div>
+
+      <div v-for="n in parseInt(daysOfWeek, 10)" :key="n" :ref="n" class="input">a</div>
+      <div class="input total-hours"></div>
+      <div class="input total-hours"></div>
+    </div>
     <EventCreatorLine
       v-for="ri in selectedResourceInfos"
       :key="ri.id"
@@ -61,7 +68,7 @@ import moment from "moment";
 Object.defineProperty(Vue.prototype, "$_", { value: _ });
 import EventCreatorLine from "./EventCreatorLine";
 export default {
-  name: "EventCreator",
+  name: "EventCreatorWOverview",
   components: {
     EventCreatorLine,
   },
@@ -196,14 +203,11 @@ export default {
         } else {
           end = moment(e.end, "HH:mm");
         }
+
         var range = moment.duration(start.diff(end));
         var hours = range.asHours();
-
-        console.log("date: " + e.start);
-        console.log(hours);
         total += Math.abs(hours);
       });
-
       console.log("total for month for " + resourceId);
 
       console.log(total);
@@ -262,8 +266,28 @@ export default {
       this.unselectedResourceInfos = this.getDefaultHidden();
       this.selectedResourceInfos = this.getDefaultDisplayed();
     },
+    haveDate(array, date) {
+      //format date
+      var tdate = moment(date, "MM/DD").format("MM/DD");
+
+      var r = undefined;
+      array.forEach((d) => {
+        if (d.date == tdate) {
+          r = d;
+          return;
+        }
+      });
+      return r;
+    },
   },
   computed: {
+    eventsWDate() {
+      var events = this.events;
+      events.forEach((e) => {
+        e.date = moment(e.start, "YYYY/MM/DD").format("MM/DD");
+      });
+      return events;
+    },
     getNameWidth() {
       var longest = this.resourceInfos.reduce(function (a, b) {
         return a.name.length > b.name.length ? a : b;
@@ -277,6 +301,39 @@ export default {
       });
       console.log(names);
       return names;
+    },
+    eventsGroupedByDay() {
+      var result = [];
+      var events = this.eventsWDate;
+      //var sdate = this.startDate;
+      //group events by date
+      var byDate = this.$_.chain(events)
+        .groupBy("date")
+        .map((value, key) => ({ date: key, events: value }))
+        .value();
+
+      //curent date for foreach
+      var curDate = moment(this.startDate, "YYYY/MM/DD").format("MM/DD");
+
+      //foeach
+      for (let i = 0; i < this.daysOfWeek; i++) {
+        //chekc for event with this date
+        var d = this.haveDate(byDate, curDate);
+        //if there are events add to resul
+        if (d != undefined) {
+          result.push(d);
+        }
+        //else push object with date and empty events for render
+        else {
+          result.push({ date: curDate, events: [] });
+        }
+        //add one day ti curdate
+        curDate = moment(curDate, "MM/DD").add(1, "d").format("MM/DD");
+      }
+
+      // console.log("grouped by day ");
+      // console.log(result);
+      return result;
     },
     //get names of undisplayed resources
   },
@@ -297,6 +354,7 @@ export default {
   display: table-cell;
   border: solid transparent 1px;
   width: 6em;
+  text-align: center;
 }
 .white-space {
   display: table-cell;
@@ -305,5 +363,40 @@ export default {
 .select {
   padding: 1px;
   display: table-cell;
+}
+.overview-container {
+  display: table-row;
+  background: white;
+}
+.dates-container {
+  display: table-row;
+  width: auto;
+  padding-left: 5px;
+  border-bottom: 2px solid black;
+}
+
+.date-container {
+  display: table-cell;
+  border: solid transparent 1px;
+  width: 6em;
+}
+.white-space {
+  display: table-cell;
+  margin: 1px;
+}
+.select {
+  padding: 1px;
+  display: table-cell;
+}
+.input {
+  width: 6em;
+  display: table-cell;
+  resize: both;
+  overflow: none;
+  border: solid 1px rgb(128, 128, 128, 0.4);
+  font-weight: bolder;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
 }
 </style>  

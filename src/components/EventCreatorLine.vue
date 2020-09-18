@@ -55,6 +55,7 @@ export default {
   watch: {
     events() {
       //* render events from this.events
+      console.log("setting events by date");
       this.eventsByDay = this.eventsData(this.events);
       this.setTextAreasByEvents();
     },
@@ -212,11 +213,10 @@ export default {
       var times = this.parseTimes(string);
       var result = null;
       //if times are valid
-      if (
-        !(times.start > times.end) &&
-        !times.start == null &&
-        !times.end == null
-      ) {
+      if (times == null) {
+        return null;
+      }
+      if (times == null || !(times.start > times.end)) {
         //create event object
         var eventObject = {
           start: date.format("YYYY/MM/DD") + " " + times.start,
@@ -249,7 +249,13 @@ export default {
       } else {
         result.end = moment(splitted[1], "HH:mm").format("HH:mm");
       }
-      if (!result.start.isValid || !result.end.isValid) return null;
+      // if (!result.start.isValid || !result.end.isValid) {
+      //   console.log(
+      //     "error in passing dates, returning null|| Object: " + string
+      //   );
+      //   console.log(result);
+      //   return null;
+      // }
       return result;
     },
     //* enter and space press handler will add new line to code
