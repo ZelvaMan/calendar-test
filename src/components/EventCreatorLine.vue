@@ -142,6 +142,8 @@ export default {
       //delete gray background if there isnt x
       if (target.innerText == "") {
         target.classList.remove("x");
+
+        console.log("emptyy text- returning");
         return;
       }
       //if input is x, it adds gray background
@@ -153,6 +155,7 @@ export default {
       }
       //if value is too small to be valid return
       if (target.innerText.replace(/' '|\n/g, "").lenght < 3) {
+        console.log("too short text- returning");
         target.classList.remove("x");
         return;
       }
@@ -174,23 +177,28 @@ export default {
 
       //foreach strings and create events for every one of them
       spl.forEach((s, i) => {
-        var e = this.createEvent(spl[i], id);
-        //if error in crearing event ( propablly parsing)
-        if (e == null) {
-          error = true;
-        } else {
-          //add to events and to valid string
-          events.push(e);
-          sIfError += s + "\n";
+        if (s != " " || s != "") {
+          var e = this.createEvent(spl[i], id);
+          //if error in crearing event ( propablly parsing)
+          if (e == null) {
+            error = true;
+          } else {
+            //add to events and to valid string
+            events.push(e);
+            sIfError += s + "\n";
+          }
         }
       });
       if (error == true) {
         //set value to have only valid events
+        console.log("error seting text");
         target.innerText = sIfError;
       }
       //set events
+      console.log("id:" + id - 1);
       this.eventsByDay[id - 1].events = events;
       //emit
+      console.log("emit function caller");
       this.emit();
     },
     //create event
@@ -213,11 +221,10 @@ export default {
       var times = this.parseTimes(string);
       var result = null;
       //if times are valid
-      if (times == null) {
-        return null;
-      }
-      if (times == null || !(times.start > times.end)) {
-        //create event object
+
+      if (times == null || times.start > times.end) {
+        result = null;
+      } else {
         var eventObject = {
           start: date.format("YYYY/MM/DD") + " " + times.start,
           end: times.end,
@@ -226,8 +233,6 @@ export default {
           possision: possision,
         };
         result = eventObject;
-      } else {
-        result = null;
       }
 
       return result;
@@ -249,13 +254,12 @@ export default {
       } else {
         result.end = moment(splitted[1], "HH:mm").format("HH:mm");
       }
-      // if (!result.start.isValid || !result.end.isValid) {
-      //   console.log(
-      //     "error in passing dates, returning null|| Object: " + string
-      //   );
-      //   console.log(result);
-      //   return null;
-      // }
+      if (
+        !moment(splitted[0], "HH:mm").isValid() ||
+        !(moment(splitted[1], "HH:mm").isValid() || splitted[1] == "cl")
+      ) {
+        result = null;
+      }
       return result;
     },
     //* enter and space press handler will add new line to code
@@ -438,6 +442,7 @@ export default {
 }
 .total-hours {
   background: #c0c0c0;
+  vertical-align: middle;
 }
 .x {
   background: #e3dddc;

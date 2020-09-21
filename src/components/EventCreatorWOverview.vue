@@ -30,7 +30,15 @@
     <div class="overview-container">
       <div class="name-container input">Overview</div>
 
-      <div v-for="n in parseInt(daysOfWeek, 10)" :key="n" :ref="n" class="input">LineContainer</div>
+      <LineContainerHorizontal
+        :startTime="startTime"
+        :endTime="endTime"
+        v-for="date in eventsGroupedByDay"
+        :key="date.date"
+        :events="date.events"
+        class="input"
+      ></LineContainerHorizontal>
+
       <div class="input total-hours"></div>
       <div class="input total-hours"></div>
     </div>
@@ -67,10 +75,12 @@ import moment from "moment";
 //import moment from "moment";
 Object.defineProperty(Vue.prototype, "$_", { value: _ });
 import EventCreatorLine from "./EventCreatorLine";
+import LineContainerHorizontal from "./LineContainerHorizontal";
 export default {
   name: "EventCreatorWOverview",
   components: {
     EventCreatorLine,
+    LineContainerHorizontal,
   },
   data() {
     return {
@@ -98,6 +108,19 @@ export default {
   },
   mounted() {},
   methods: {
+    haveDate(array, date) {
+      //format date
+      var tdate = moment(date, "MM/DD").format("MM/DD");
+
+      var r = undefined;
+      array.forEach((d) => {
+        if (d.date == tdate) {
+          r = d;
+          return;
+        }
+      });
+      return r;
+    },
     onInput(e) {
       //need to fix emit so it will join with other resources
       this.$emit("input", this.eventsForEmit(e));
@@ -266,19 +289,6 @@ export default {
       this.unselectedResourceInfos = this.getDefaultHidden();
       this.selectedResourceInfos = this.getDefaultDisplayed();
     },
-    haveDate(array, date) {
-      //format date
-      var tdate = moment(date, "MM/DD").format("MM/DD");
-
-      var r = undefined;
-      array.forEach((d) => {
-        if (d.date == tdate) {
-          r = d;
-          return;
-        }
-      });
-      return r;
-    },
   },
   computed: {
     eventsWDate() {
@@ -335,6 +345,7 @@ export default {
       // console.log(result);
       return result;
     },
+
     //get names of undisplayed resources
   },
 };

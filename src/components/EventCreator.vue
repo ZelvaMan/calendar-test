@@ -155,8 +155,6 @@ export default {
             if (!moment(e.start, "YYYY/MM/DD").isBetween(sd, inWeek)) {
               //! add event to events for resourcec
               eventsForResource.push(e);
-              console.log("isnt between ");
-              console.log(e);
             }
           });
           //
@@ -175,16 +173,21 @@ export default {
       return events;
     },
     getTotalHoursMonth(resourceId) {
+      //! there seems to be error in event creator line which emits empty events
+      //total hours for month of startDate
       var total = 0;
+      //events in cur month
       var events = [];
-      var month = moment(this.startDate, "YYYY/MM/DD").format("MM");
+      //get cur month
+      var month = moment(this.startDate, "YYYY/MM/DD").month;
+      //*get events in cur mont
       this.events.forEach((e) => {
-        var isSameMonth =
-          moment(e.start, "YYYY/MM/DD HH:mm").format("MM") == month;
-        if (e.resource == resourceId && isSameMonth) {
+        var isSameMonth = moment(e.start, "YYYY/MM/DD HH:mm").month == month;
+        if (e.resource == resourceId && month) {
           events.push(e);
         }
       });
+      //foreach evetns and ad their duration to total
       events.forEach((e) => {
         var start = moment(
           moment(e.start, "YYYY/MM/DD HH:mm").format("HH:mm"),
@@ -196,12 +199,12 @@ export default {
         } else {
           end = moment(e.end, "HH:mm");
         }
-        var range = moment.duration(start.diff(end));
-        var hours = range.asHours();
 
-        console.log("date: " + e.start);
+        var range = moment.duration(end.diff(start));
+        var hours = range.asHours();
         console.log(hours);
-        total += Math.abs(hours);
+        console.log(e.start + "----  " + e.end);
+        total += hours; //Math.abs(hours);
       });
 
       console.log("total for month for " + resourceId);

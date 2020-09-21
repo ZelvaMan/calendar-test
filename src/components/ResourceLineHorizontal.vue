@@ -42,7 +42,7 @@ export default {
       var id = 0;
 
       //if there aren't any events, fill
-      var divs = [{ color: this.tcolor, height: "100", id: ++id }];
+      var divs = [{ color: this.tcolor, width: "100", id: ++id }];
 
       var lastEventEnd = startHour;
       var lastEventMinute = "0";
@@ -68,31 +68,31 @@ export default {
             minute: eEndMoment.format("mm"),
           };
 
-          //if is event bigger then range, set ti to full height
+          //if is event bigger then range, set ti to full width
           if (eStart.hour < startHour) eStart.hour = startHour;
           if (eEnd.hour > endHour) eEnd.hour = endHour;
 
-          // calculate div height
+          // calculate div width
           var bDivHeigh = (eStart.hour - lastEventEnd) * pPHour;
           bDivHeigh -= this.minToQuarter(lastEventMinute) * pPQuarter;
           bDivHeigh += this.minToQuarter(eStart.minute) * pPQuarter;
           //fill blank space between last event end and this
           var blankDiv = {
             color: this.tcolor,
-            height: bDivHeigh,
+            width: bDivHeigh,
             id: ++id,
           };
-          if (blankDiv.height != 0) {
+          if (blankDiv.width != 0) {
             divs.push(blankDiv);
           }
 
-          // calculate div height based on event lenght
+          // calculate div width based on event lenght
           var divHeigh = (eEnd.hour - eStart.hour) * pPHour;
           divHeigh -= this.minToQuarter(eStart.minute) * pPQuarter;
           divHeigh += this.minToQuarter(eEnd.minute) * pPQuarter;
 
           //create div and add it to divs
-          var eDiv = { color: e.color, height: Math.round(divHeigh), id: ++id };
+          var eDiv = { color: e.color, width: Math.round(divHeigh), id: ++id };
           divs.push(eDiv);
 
           //set event end to end of event
@@ -111,7 +111,7 @@ export default {
     },
     //creatr dynamic style string
     createStyleString(div) {
-      var v = "height:" + div.height + "%; background:" + div.color + ";";
+      var v = "width:" + div.width + "%; background:" + div.color + ";";
       return v;
     },
   },
@@ -121,16 +121,14 @@ export default {
 <style scoped>
 .resource-line {
   margin-left: 3px;
-  width: 2px;
-  height: 100%;
+  width: 100%;
+  height: 2px;
+  margin-top: 2px;
   display: flex;
   flex-wrap: nowrap;
-  flex-direction: column;
+  flex-direction: row;
 }
 
-.line {
-  width: 100%;
-}
 .red {
   background: red;
 }

@@ -1,24 +1,24 @@
 <template>
   <div class="line-container">
-    <ResourceLine
+    <ResourceLineHorizontal
       v-for="resourceEvents in this.eventsGroupedByResource"
       v-bind:key="resourceEvents.resource"
       :startTime="startTime"
       :endTime="endTime"
       :events="resourceEvents.events"
-    ></ResourceLine>
+    ></ResourceLineHorizontal>
   </div>
 </template>
 <script>
-import ResourceLine from "./ResourceLine.vue";
+import ResourceLineHorizontal from "./ResourceLineHorizontal";
 import Vue from "vue";
 import _ from "lodash";
 //import { ISO_8601 } from 'moment';
 Object.defineProperty(Vue.prototype, "$_", { value: _ });
 export default {
-  name: "LineContainer",
+  name: "LineContainerHorizontal",
   components: {
-    ResourceLine,
+    ResourceLineHorizontal,
   },
   props: {
     //array with event viz. notes.md
@@ -53,13 +53,12 @@ export default {
 
 <style scoped>
 .line-container {
-  padding: 5px;
-  height: 20%;
-  min-width: 40px;
   display: flex;
+  width: 6rem;
+  height: 100%;
   flex-wrap: nowrap;
-  flex-direction: row;
-
+  flex-direction: column;
+  padding: 3px;
   border-top: 1.5px solid rgb(0, 0, 0, 0.4);
 }
 </style>
