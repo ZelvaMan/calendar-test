@@ -82,16 +82,45 @@ export default {
     },
     keyRight(e) {
       console.log("keyRight");
-      //emulates tab
+      //get element id with n +1
+      e.preventDefault();
+      var oldId = e.target.id;
+      var day = parseInt(oldId.slice(0, oldId.indexOf("-"))) + 1;
+      console.log(day);
+      var resource = oldId.slice(oldId.lastIndexOf("-") + 1); // 1==','.length
+      var newObject = this.$refs[day];
+      console.log(newObject);
+      if (newObject != null) {
+        newObject[0].focus();
+        console.log("changing focus");
+      } else {
+        //change row
+      }
     },
     keyLeft(e) {
       console.log("keyLeft");
-      //emulates shift tab
+
+      e.preventDefault();
+      var oldId = e.target.id;
+      var day = parseInt(oldId.slice(0, oldId.indexOf("-"))) - 1;
+      console.log(day);
+      var resource = oldId.slice(oldId.lastIndexOf("-") - 1); // 1==','.length
+      var newObject = this.$refs[day];
+      console.log(newObject);
+      if (newObject != null) {
+        newObject[0].focus();
+        this.selectAll(newObject[0]);
+        console.log("changing focus");
+      } else {
+        //change row
+      }
     },
     onFocus(e) {
       console.log("focusCHanged");
       console.log(e.target);
-      var el = e.target;
+      this.selectAll(e.target);
+    },
+    selectAll(el) {
       var range = document.createRange();
       range.selectNodeContents(el);
       var sel = window.getSelection();
