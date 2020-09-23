@@ -13,6 +13,11 @@
       v-on:blur="onChange"
       v-on:keydown.space="onEnter"
       v-on:keydown.enter="onEnter"
+      v-on:focus="onFocus"
+      v-on:keyup.up="keyUp"
+      v-on:keyup.down="keyDown"
+      v-on:keyup.right="keyRight"
+      v-on:keyup.left="keyLeft"
       contenteditable="true"
       class="input"
     />
@@ -67,6 +72,32 @@ export default {
     },
   },
   methods: {
+    keyUp(e) {
+      console.log("keyUp");
+      //change resource to one above, but keep same day
+    },
+    keyDown(e) {
+      console.log("keyDown");
+      //change resource to one below, keep day same
+    },
+    keyRight(e) {
+      console.log("keyRight");
+      //emulates tab
+    },
+    keyLeft(e) {
+      console.log("keyLeft");
+      //emulates shift tab
+    },
+    onFocus(e) {
+      console.log("focusCHanged");
+      console.log(e.target);
+      var el = e.target;
+      var range = document.createRange();
+      range.selectNodeContents(el);
+      var sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+    },
     // sets default texts for textaras
     setTextAreasByEvents() {
       if (this.xRefs) {
@@ -148,9 +179,11 @@ export default {
       }
       //if input is x, it adds gray background
 
-      if (target.innerText.toLowerCase() == "x") {
+      if (target.innerText.toLowerCase().includes("x")) {
         if (!target.classList.contains("x")) target.classList.add("x");
+        target.innerText = "x";
         console.log("return");
+
         return;
       }
       //if value is too small to be valid return
