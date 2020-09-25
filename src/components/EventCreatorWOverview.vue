@@ -12,7 +12,7 @@
       <div class="date-container" v-for="n in parseInt(daysOfWeek)" :key="n">
         <b>{{moment(startDate).add(n -1,"d").format("dddd")}}</b>
         <br />
-        {{moment(startDate).add(n -1,"d").format("MM.DD.")}}
+        {{moment(startDate).add(n -1,"d").format("DD.MM")}}
       </div>
       <div class="date-container">
         <b>
