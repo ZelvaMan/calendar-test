@@ -14,10 +14,10 @@
       v-on:keydown.space="onEnter"
       v-on:keydown.enter="onEnter"
       v-on:focus="onFocus"
-      v-on:keyup.up="keyUp"
-      v-on:keyup.down="keyDown"
-      v-on:keyup.right="keyRight"
-      v-on:keyup.left="keyLeft"
+      v-on:keydown.up="keyUp"
+      v-on:keydown.down="keyDown"
+      v-on:keydown.right="keyRight"
+      v-on:keydown.left="keyLeft"
       contenteditable="true"
       class="input"
     />
@@ -56,6 +56,7 @@ export default {
     NameSize: Number,
     possisions: Array,
     totalHoursMonth: String,
+    id: Number,
   },
   watch: {
     events() {
@@ -72,6 +73,15 @@ export default {
     },
   },
   methods: {
+    ChangeFocus(day) {
+      console.log("Change focus method called");
+      var newObject = this.$refs[day];
+      if (newObject != null) {
+        newObject[0].focus();
+
+        console.log("Changing focus");
+      }
+    },
     keyUp(e) {
       console.log("keyUp");
       //change resource to one above, but keep same day
@@ -108,11 +118,12 @@ export default {
       var newObject = this.$refs[day];
       console.log(newObject);
       if (newObject != null) {
+        //change focus to new object
         newObject[0].focus();
         this.selectAll(newObject[0]);
         console.log("changing focus");
       } else {
-        //change row
+        this.$emit("change-focus-up", { day: day, refId: this.id });
       }
     },
     onFocus(e) {
@@ -305,23 +316,34 @@ export default {
 
       var result = { start: "", end: "" };
       //split string to 2 datetimes
-      var splitted = string.split("-");
+      if (string.includes("-")) {
+        console.log("parse times with ---------------");
+        var splitted = string.split("-");
+        result.start = moment(splitted[0], "HH:mm").format("HH:mm");
+        if (splitted[1] == "cl") {
+          result.end = "cl";
+        } else {
+          result.end = moment(splitted[1], "HH:mm").format("HH:mm");
+        }
+        if (
+          !moment(splitted[0], "HH:mm").isValid() ||
+          !(moment(splitted[1], "HH:mm").isValid() || splitted[1] == "cl")
+        ) {
+          result = null;
+        }
+      } else {
+        console.log("parsing time without -");
+        result.end = "cl";
+        result.start = moment(string, "HH:mm").format("HH:mm");
+        if (!moment(string, "HH:mm").isValid()) {
+          result = null;
+        }
+      }
       //start
-      result.start = moment(splitted[0], "HH:mm").format("HH:mm");
 
       //end
       //* if end is cl(close) set time to endTime
-      if (splitted[1] == "cl") {
-        result.end = "cl";
-      } else {
-        result.end = moment(splitted[1], "HH:mm").format("HH:mm");
-      }
-      if (
-        !moment(splitted[0], "HH:mm").isValid() ||
-        !(moment(splitted[1], "HH:mm").isValid() || splitted[1] == "cl")
-      ) {
-        result = null;
-      }
+
       return result;
     },
     //* enter and space press handler will add new line to code

@@ -43,8 +43,10 @@
       <div class="input total-hours"></div>
     </div>
     <EventCreatorLine
-      v-for="ri in selectedResourceInfos"
+      v-for="(ri, i) in selectedResourceInfos"
       :key="ri.id"
+      :ref="i"
+      :id="i"
       :events="getEventWithResource(ri.id)"
       :resourceInfo="ri"
       :daysOfWeek="daysOfWeek"
@@ -52,6 +54,7 @@
       :possisions="possisions"
       :NameSize="getNameWidth"
       v-on:input="onInput"
+      v-on:change-focus-up="changeFocusUp"
       :startTime="startTime"
       :endTime="endTime"
       :totalHoursMonth="getTotalHoursMonth(ri.id)"
@@ -108,6 +111,17 @@ export default {
   },
   mounted() {},
   methods: {
+    changeFocusUp(e) {
+      console.log("change focus up");
+      var day = e.day;
+      var targetRefId = e.refId;
+      var newId = parseInt(targetRefId) - 1;
+      if (newId > 7) {
+        newId = 1;
+      }
+      var ref = this.$refs[newId][0];
+      ref.ChangeFocus(day);
+    },
     haveDate(array, date) {
       //format date
       var tdate = moment(date, "MM/DD").format("MM/DD");
