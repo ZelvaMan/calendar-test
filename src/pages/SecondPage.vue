@@ -1,6 +1,14 @@
 <template>
   <page>
     <h1>Event Creator with lines</h1>
+    <div class="buttons">
+      <lteButton
+        class="btn-wspace"
+        :is-primary="true"
+        v-on:click.native="removeWeek()"
+      >previous week</lteButton>
+      <lteButton class="btn-wspace" :is-primary="true" v-on:click.native="addWeek()">next week</lteButton>
+    </div>
     <EventCreatorWOverview
       daysOfWeek="7"
       v-on:input="addEvent"
