@@ -18,8 +18,10 @@
       v-on:keydown.down="keyDown"
       v-on:keydown.right="keyRight"
       v-on:keydown.left="keyLeft"
-      contenteditable="true"
+      :contenteditable="getContenteditable(n)"
+      :tabindex="n * id"
       class="input"
+      v-on:cut="onCut"
     />
     <div class="input total-hours" ref="total-week"></div>
     <div class="input total-hours" ref="total-month">{{totalHoursMonth}}</div>
@@ -73,8 +75,16 @@ export default {
     },
   },
   methods: {
-    ChangeFocus(day) {
+    getContenteditable(n) {
+      return true;
+    },
+    onCut(e) {
+      //TODO store some data id edit ois eabled
+      e.preventDefault();
+    },
+    changeFocus(day) {
       console.log("Change focus method called");
+      console.log(day);
       var newObject = this.$refs[day];
       if (newObject != null) {
         newObject[0].focus();
@@ -113,6 +123,7 @@ export default {
       e.preventDefault();
       var oldId = e.target.id;
       var day = parseInt(oldId.slice(0, oldId.indexOf("-"))) - 1;
+      if (day < 0) day = this.daysOfWeek;
       console.log(day);
       var resource = oldId.slice(oldId.lastIndexOf("-") - 1); // 1==','.length
       var newObject = this.$refs[day];
@@ -121,8 +132,10 @@ export default {
         //change focus to new object
         newObject[0].focus();
         this.selectAll(newObject[0]);
-        console.log("changing focus");
-      } else {
+        console.log("focus changed");
+      }
+      if (day < 1) {
+        console.log("emitting change focus up");
         this.$emit("change-focus-up", { day: day, refId: this.id });
       }
     },

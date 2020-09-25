@@ -114,13 +114,15 @@ export default {
     changeFocusUp(e) {
       console.log("change focus up");
       var day = e.day;
+      console.log(day);
       var targetRefId = e.refId;
+      console.log(targetRefId);
       var newId = parseInt(targetRefId) - 1;
-      if (newId > 7) {
-        newId = 1;
-      }
+
+      console.log(ref.changeFocus);
       var ref = this.$refs[newId][0];
-      ref.ChangeFocus(day);
+      console.log(ref);
+      ref.changeFocus(day);
     },
     haveDate(array, date) {
       //format date
