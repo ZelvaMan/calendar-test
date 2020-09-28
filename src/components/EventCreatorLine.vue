@@ -18,7 +18,7 @@
       v-on:keydown.down="keyDown"
       v-on:keydown.right="keyRight"
       v-on:keydown.left="keyLeft"
-      :contenteditable="getContenteditable(n)"
+      :contenteditable="true"
       :tabindex="n * id"
       class="input"
       v-on:cut="onCut"
@@ -75,8 +75,11 @@ export default {
     },
   },
   methods: {
-    getContenteditable(n) {
-      return true;
+    isHoliday(date){
+      var daysoff = this.resourceInfo.holidays
+      if(daysoff != null){console.log("HOLIDAYS:")
+      console.log(daysoff)}
+
     },
     onCut(e) {
       //TODO store some data id edit ois eabled
@@ -166,6 +169,7 @@ export default {
         //get textarea ref based on days between date and weekDateStart
         var textarea = this.$refs[diff + 1][0];
         //get event string
+        this.isHoliday(d)
         if (textarea.innerText.toLowerCase() != "x") {
           textarea.classList.remove("x");
 

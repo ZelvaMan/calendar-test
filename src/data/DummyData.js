@@ -18,7 +18,8 @@ export const dummyResourceInfoForEventCreator = [{
     color: "orange",
     name: "Lukas",
     id: "D",
-    possision: "FOH"
+    possision: "FOH",
+    holidays: ["20/8/13","20/8/14" ,"20/8/17"]
   }, {
 
     color: "red",
