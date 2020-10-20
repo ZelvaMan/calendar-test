@@ -66,6 +66,7 @@
         :options="unselectedRINames"
         v-on:input="SelectInputHandler"
       ></multiselect>
+      <div class="empty-cell" v-for="n in parseInt(daysOfWeek)" :key="n"></div>
     </div>
   </div>
 </template>
@@ -425,5 +426,8 @@ export default {
   text-align: center;
   align-items: center;
   justify-content: center;
+}
+.empty-cell {
+  display: table-cell;
 }
 </style>  
