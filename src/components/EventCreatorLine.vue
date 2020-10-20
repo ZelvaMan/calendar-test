@@ -19,7 +19,6 @@
       v-on:keydown.right="keyRight"
       v-on:keydown.left="keyLeft"
       :contenteditable="true"
-      :tabindex="n * id"
       class="input"
       v-on:cut="onCut"
     />
@@ -77,8 +76,13 @@ export default {
   methods: {
     isHoliday(date){
       var daysoff = this.resourceInfo.holidays
-      if(daysoff != null){console.log("HOLIDAYS:")
-      console.log(daysoff)}
+      console
+      if(daysoff != null){
+        if(daysoff.includes(date)){
+          return true
+        }
+      }
+      return false
 
     },
     onCut(e) {
@@ -106,41 +110,41 @@ export default {
     keyRight(e) {
       console.log("keyRight");
       //get element id with n +1
-      e.preventDefault();
-      var oldId = e.target.id;
-      var day = parseInt(oldId.slice(0, oldId.indexOf("-"))) + 1;
-      console.log(day);
-      var resource = oldId.slice(oldId.lastIndexOf("-") + 1); // 1==','.length
-      var newObject = this.$refs[day];
-      console.log(newObject);
-      if (newObject != null) {
-        newObject[0].focus();
-        console.log("changing focus");
-      } else {
-        //change row
-      }
+      // e.preventDefault();
+      // var oldId = e.target.id;
+      // var day = parseInt(oldId.slice(0, oldId.indexOf("-"))) + 1;
+      // console.log(day);
+      // var resource = oldId.slice(oldId.lastIndexOf("-") + 1); // 1==','.length
+      // var newObject = this.$refs[day];
+      // console.log(newObject);
+      // if (newObject != null) {
+      //   newObject[0].focus();
+      //   console.log("changing focus");
+      // } else {
+      //   //change row
+      // }
     },
     keyLeft(e) {
       console.log("keyLeft");
 
-      e.preventDefault();
-      var oldId = e.target.id;
-      var day = parseInt(oldId.slice(0, oldId.indexOf("-"))) - 1;
-      if (day < 0) day = this.daysOfWeek;
-      console.log(day);
-      var resource = oldId.slice(oldId.lastIndexOf("-") - 1); // 1==','.length
-      var newObject = this.$refs[day];
-      console.log(newObject);
-      if (newObject != null) {
-        //change focus to new object
-        newObject[0].focus();
-        this.selectAll(newObject[0]);
-        console.log("focus changed");
-      }
-      if (day < 1) {
-        console.log("emitting change focus up");
-        this.$emit("change-focus-up", { day: day, refId: this.id });
-      }
+      // e.preventDefault();
+      // var oldId = e.target.id;
+      // var day = parseInt(oldId.slice(0, oldId.indexOf("-"))) - 1;
+      // if (day < 0) day = this.daysOfWeek;
+      // console.log(day);
+      // var resource = oldId.slice(oldId.lastIndexOf("-") - 1); // 1==','.length
+      // var newObject = this.$refs[day];
+      // console.log(newObject);
+      // if (newObject != null) {
+      //   //change focus to new object
+      //   newObject[0].focus();
+      //   this.selectAll(newObject[0]);
+      //   console.log("focus changed");
+      // }
+      // if (day < 1) {
+      //   console.log("emitting change focus up");
+      //   this.$emit("change-focus-up", { day: day, refId: this.id });
+      // }
     },
     onFocus(e) {
       console.log("focusCHanged");
@@ -169,7 +173,10 @@ export default {
         //get textarea ref based on days between date and weekDateStart
         var textarea = this.$refs[diff + 1][0];
         //get event string
-        this.isHoliday(d)
+        if(this.isHoliday(d.date)){
+          textarea.innerText = "H"
+          return
+        }
         if (textarea.innerText.toLowerCase() != "x") {
           textarea.classList.remove("x");
 
@@ -235,12 +242,15 @@ export default {
         return;
       }
       //if input is x, it adds gray background
-
       if (target.innerText.toLowerCase().includes("x")) {
         if (!target.classList.contains("x")) target.classList.add("x");
         target.innerText = "x";
         console.log("return");
 
+        return;
+      }
+      //if value is H ( holidays) it will return 
+      if(target.innerText.includes("H")){
         return;
       }
       //if value is too small to be valid return
@@ -390,14 +400,14 @@ export default {
     daysDiff(date1, date2) {
       //parse dates to moment objects
       var start = moment(date1, "YYYY/MM/DD");
-      var end = moment(date2, "MM/DD");
+      var end = moment(date2, "YYYY/MM/DD");
       //! get diif using math abs and moment duration
       return Math.abs(moment.duration(start.diff(end)).asDays());
     },
     //*check if array have events with that datre
     haveDate(array, date) {
       //get moment datr
-      var tdate = moment(date, "MM/DD").format("MM/DD");
+      var tdate = moment(date, "YYYY/MM/DD").format("YYYY/MM/DD");
       var r = undefined;
       //foreach all event, return that datatr
       array.forEach((d) => {
@@ -477,7 +487,7 @@ export default {
     eventsWDate() {
       var events = this.events;
       events.forEach((e) => {
-        e.date = moment(e.start, "YYYY/MM/DD HH:mm").format("MM/DD");
+        e.date = moment(e.start, "YYYY/MM/DD HH:mm").format("YYYY/MM/DD");
       });
       return events;
     },
@@ -493,7 +503,7 @@ export default {
         }))
         .value();
 
-      var cdate = moment(this.weekDateStart, "YYYY/MM/DD").format("MM/DD");
+      var cdate = moment(this.weekDateStart, "YYYY/MM/DD").format("YYYY/MM/DD");
       //! fills dates without events with empty object
       //! IMPORTANT for rendering
       for (let i = 0; i < parseInt(this.daysOfWeek); i++) {
@@ -505,7 +515,7 @@ export default {
           //if there arent push object ith empty dates
           result.push({ date: cdate, events: [] });
         }
-        cdate = moment(cdate, "MM/DD").add(1, "d").format("MM/DD");
+        cdate = moment(cdate, "YYYY/MM/DD").add(1, "d").format("YYYY/MM/DD");
       }
       return result;
     },
